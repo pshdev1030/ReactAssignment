@@ -40,7 +40,8 @@ export default function CountryComponent(){
     dispatch(getData());
     }
     if(dataRef.current){
-      const observer=new IntersectionObserver(({isIntersecting})=>{
+      const observer=new IntersectionObserver(([{isIntersecting}])=>{
+        console.log(isIntersecting);
         if(isIntersecting){
           infiniteCallback(data,countries,num);
         }
