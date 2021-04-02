@@ -1,7 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useState } from 'react';
 import {useDispatch, useSelector } from 'react-redux';
+import useInfinteScroll from '../common/useIInfinteScroll';
 import CountryContainer from '../Container/CountryContainer';
 import {getData} from '../State/commonstate';
+import styled from 'styled-components';
+import { toast,ToastContainer } from 'react-toastify';
 
 
 export default function CountryComponent(){
@@ -11,55 +14,71 @@ export default function CountryComponent(){
     error:state.error,
   }));
   const dispatch=useDispatch();
-
-  const num=useRef(70);
-  const dataRef=useRef();
-  const data=countries.slice(0,parseInt(50));
-
-  const infiniteCallback=(data,countries,num)=>{
-    if(num+50>=countries){
-      data=countries.slice(0,countries.length);
+  
+  const [data,setData]=useState({
+    countrydata:[],
+    num:50,
+  });
+  const {countrydata,num}=data;
+  
+  const dataRef=useRef(null);
+  const infiniteCallback=()=>{
+    if(num+50>=countries.length){
+      console.log(data)
+      setData(prev=>({
+        countrydata:countries,
+        num:prev.num+countries.length,
+      }))
     }
     else{
-      data=countries.slice(0,num);
-      num=num+50;
+      setData(prev=>({
+        countrydata:countries.slice(0,num),
+        num:prev.num+50,
+      }))
+
     }
   }
 
-  const option={
-    root:null,
-    treshold:0.3,
-    rootMargin:'0px',
+  const onClick=(e)=>{
+    console.log(e);
+    toast.info("국가를 삭제하였습니다.");
   };
-
-  const onClick=()=>{};
 
   /*getData from api setinfinityscroll */
   useEffect(()=>{
-    if(loading){
+    console.log(dataRef.current);
     dispatch(getData());
-    }
-    if(dataRef.current){
-      const observer=new IntersectionObserver(([{isIntersecting}])=>{
-        console.log(isIntersecting);
-        if(isIntersecting){
-          infiniteCallback(data,countries,num);
-        }
-      },option)
-      observer.observe(dataRef.current);
-      return()=>{
-        observer.unobserve();
+  },[]);
+
+  useInfinteScroll({
+    target:dataRef.current,
+    threshold:1.0,
+    onIntersect:([{isIntersecting}])=>{
+      if(isIntersecting&&!loading){
+        infiniteCallback();
       }
     }
-  },[dataRef.current]);
-
+  })
 /*rendering*/
   if(loading) return<div>Loading...</div>
   if(error) return<div>Error</div>
   if(!loading) return(
-    <CountryContainer data={data} onClick={onClick} num={num} dataRef={dataRef}/>
-)
+      <CountryBox>
+        <button onClick={infiniteCallback}>asdf</button>
+        <CountryContainer data={countrydata} onClick={onClick} dataRef={dataRef}/>
+      <ToastContainer autoClose="3000"/>
+      </CountryBox>
+  );
 }
 
+
+
+const CountryBox=styled.div`
+display:flex;
+flex-wrap:wrap;
+align-items:flex-start;
+justify-content:flex-start;
+overflow:scroll;
+`;
 //Thunk 할거면 dispatch로 함수를 보내야 thunk미들웨어에서 함수면 실행 액션이면 dispatch를 한다.
 //얕은복사 잘 피하기

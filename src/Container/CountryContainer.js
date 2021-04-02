@@ -1,13 +1,12 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
 
 const CountryBox=styled.div`
 display:flex;
-
 flex-wrap:wrap;
 align-items:flex-start;
 justify-content:flex-start;
-overflow:scroll;
 `;
 
 const CountryEle=styled.div`
@@ -35,7 +34,7 @@ text-align:center
 
 export default function CountryContainer({data,onClick,dataRef}){
     return(
-        <CountryBox>
+        <>
         {data.map(ele=>
             <CountryEle key={ele.alpha2Code}>
                 <CountryText><strong>국가 이름 :</strong>{ele.name}</CountryText>
@@ -46,7 +45,7 @@ export default function CountryContainer({data,onClick,dataRef}){
                 <CountryBtn onClick={onClick}>삭제</CountryBtn>
             </CountryEle>
         )}
-        <div ref={dataRef}>asdfasdfasfd</div>
-        </CountryBox>
+        <div ref={dataRef}>adfasdf</div>
+        </>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import CountryComponent from './Component/CountryComponent';
+import CreateComponent from './Component/CreateComponent';
 
 
 const GlobalStyle=styled.div`
@@ -15,7 +16,8 @@ height:80vh;
 function App() {
 return(
   <GlobalStyle>
-  <CountryComponent/>
+    <CreateComponent/>
+    <CountryComponent/>
   </GlobalStyle>
 );
   
@@ -30,5 +32,8 @@ https://react.vlpt.us/basic/19-React.memo.html
 React.useCallback
 https://react.vlpt.us/basic/18-useCallback.html
 fetch
+
+react-hook-form
+react-toastify
 axios*/
 

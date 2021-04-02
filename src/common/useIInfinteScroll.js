@@ -1,36 +1,29 @@
 import {useEffect} from 'react';
 
-  export const infiniteCallback=(data,countries,num)=>{
-    if(num+50<=countries){
-      data=countries.slice(0,countries.length);
-    }
-    else{
-      data=countries.slice(0,num);
-      num=num+50;
-    }
-  }
-
-  export const useInfiniteScroll=({
+const useInfiniteScroll=({
     root=null,
     target,
     onIntersect,
-    treshold=1.0,
+    threshold=0.5,
     rootMargin='0px',
   })=>{
     useEffect(()=>{
-        if(!target){
-            return;
-        };
-
+      if(!target){
+        console.log('hi');
+        return;
+    }
+      console.log('hello');
         const observer =new IntersectionObserver(onIntersect,{
             root,
             rootMargin,
-            treshold,
-        });
+            threshold,
+        })
 
         observer.observe(target);
-    return()=>{
-            observer.unobserve(target);
+        return()=>{
+            observer.disconnect();
         }
-    },[target,root,rootMargin,onIntersect,treshold]);
+    },[target,root,rootMargin,onIntersect,threshold]);
   }
+
+  export default useInfiniteScroll;
