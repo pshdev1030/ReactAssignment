@@ -1,7 +1,9 @@
 import React from 'react';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
 import CountryComponent from './Component/CountryComponent';
 import CreateComponent from './Component/CreateComponent';
+import SearchComponent from './Component/SearchComponent';
 
 
 const GlobalStyle=styled.div`
@@ -9,15 +11,19 @@ display:flex;
 flex-flow:column;
 align-items:center;
 justify-content:center;
-width:70vw;
-height:80vh;
+width:85vw;
 `;
+const GlobalStyle2=styled.div`
+
+`
 
 function App() {
 return(
   <GlobalStyle>
+    <SearchComponent/>
     <CreateComponent/>
     <CountryComponent/>
+  <ToastContainer autoClose="3000"/>
   </GlobalStyle>
 );
   

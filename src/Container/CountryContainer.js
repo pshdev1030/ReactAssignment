@@ -1,13 +1,5 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
-
-const CountryBox=styled.div`
-display:flex;
-flex-wrap:wrap;
-align-items:flex-start;
-justify-content:flex-start;
-`;
 
 const CountryEle=styled.div`
 display:flex;
@@ -16,7 +8,8 @@ flex-flow:column wrap;
 margin: 20px 20px;
 align-items:center;
 justify-content:center;
-border:1px solid black;
+border:2px solid grey;
+border-radius:10px;
 `;
 
 const CountryBtn=styled.button`
@@ -36,16 +29,16 @@ export default function CountryContainer({data,onClick,dataRef}){
     return(
         <>
         {data.map(ele=>
-            <CountryEle key={ele.alpha2Code}>
+            <CountryEle key={ele.alpha2Code+ele.capital}>
                 <CountryText><strong>국가 이름 :</strong>{ele.name}</CountryText>
                 <CountryText><strong>국가 코드 :</strong>{ele.alpha2Code}</CountryText>
                 <CountryText><strong>수도 :</strong>{ele.capital}</CountryText>
                 <CountryText><strong>지역 :</strong>{ele.region}</CountryText>
                 <CountryText><strong>지역코드 :</strong>{ele.callingCodes}</CountryText>
-                <CountryBtn onClick={onClick}>삭제</CountryBtn>
+                <CountryBtn onClick={onClick} data-key={ele.alpha2Code+ele.capital}>삭제</CountryBtn>
             </CountryEle>
         )}
-        <div ref={dataRef}>adfasdf</div>
+        <div ref={dataRef}></div>
         </>
     );
 }

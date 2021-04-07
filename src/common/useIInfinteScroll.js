@@ -4,15 +4,13 @@ const useInfiniteScroll=({
     root=null,
     target,
     onIntersect,
-    threshold=0.5,
+    threshold=1,
     rootMargin='0px',
   })=>{
     useEffect(()=>{
       if(!target){
-        console.log('hi');
         return;
     }
-      console.log('hello');
         const observer =new IntersectionObserver(onIntersect,{
             root,
             rootMargin,

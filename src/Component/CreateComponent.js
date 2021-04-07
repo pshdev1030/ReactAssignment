@@ -1,8 +1,9 @@
 import React from 'react';
 import {useForm} from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { AddCountry } from '../State/commonstate';
-import {ToastContainer,toast} from 'react-toastify';
+import { addCountryAction, isOverlap} from '../State/commonstate';
+import styled from 'styled-components';
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function CreateComponent(){
@@ -10,7 +11,6 @@ function CreateComponent(){
     const dispatch=useDispatch();
 
     const onSubmit=(input)=>{
-        console.log(input);
         let count=0;
         for(const key in input){
             const value=input[key];
@@ -19,27 +19,58 @@ function CreateComponent(){
             }
         }
         if(count!==0){
-            toast.info("모든 값을 입력해야 합니다.")
+            toast.error("모든 값을 입력해야 합니다.");
             return;
         }
-        else{
-        dispatch(AddCountry(input));
+        const overlapTest=[
+            {err:dispatch(isOverlap(input,"name")),type:'이름'},
+            {err:dispatch(isOverlap(input,"alpha2Code")),type:'국가 코드'},
+        ]
+
+        const overlapCheck=overlapTest.filter(({err})=>err===true)
+
+        if(overlapCheck.length===overlapTest.length){
+            toast.error('이름과 국가코드이(가) 중복인 나라가 존재합니다.');
+            return;
         }
-    }
+        if(overlapCheck.length>0){
+            console.log(overlapCheck);
+            toast.error(`${overlapCheck[0].type}이(가) 중복인 나라가 존재합니다.`);
+            return;
+        }
+            dispatch(addCountryAction(input));
+        }
+        
     return(
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <CountryInfoForm onSubmit={handleSubmit(onSubmit)}>
    {/* register your input into the hook by invoking the "register" function */}
-      <input name="Name" placeholder="이름(Name)"ref={register()} />
+      <CountryInfoInput name="name" placeholder="이름(Name)"ref={register()} />
       {/* include validation with required or other standard HTML validation rules */}
-      <input name="Alpha2Code" placeholder="국가코드(Alpha2Code)" ref={register()}/>
-      <input name="Capital" placeholder="수도(Capital)" ref={register()}/>
-      <input name="Region" placeholder="지역(Region)"ref={register()}/>
-      <input name="CallingCodes" placeholder="지역코드(CallingCodes)" ref={register()}/>
-      <input type="Submit" defaultValue="제출하기"/>
-      <ToastContainer autoClose="3000"/>
-    </form>
+      <CountryInfoInput name="alpha2Code" placeholder="국가코드(Alpha2Code)" ref={register()}/>
+      <CountryInfoInput name="capital" placeholder="수도(Capital)" ref={register()}/>
+      <CountryInfoInput name="region" placeholder="지역(Region)"ref={register()}/>
+      <CountryInfoInput name="callingCodes" placeholder="지역코드(CallingCodes)" ref={register()}/>
+      <CountrySubmitInput type="submit" value="제출하기"/>
+    </CountryInfoForm>
     );
 }
+
+const CountryInfoInput=styled.input`
+padding:8px;
+margin:8px;
+border:2px solid grey;
+border-radius:10px;
+`;
+
+const CountryInfoForm=styled.form`
+margin-bottom:3vh;
+`;
+
+const CountrySubmitInput=styled.input`
+padding:8px;
+margin:8px;
+border:none;
+`;
 
 export default CreateComponent;
 
