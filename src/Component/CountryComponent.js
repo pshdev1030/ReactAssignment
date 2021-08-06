@@ -12,7 +12,8 @@ export default function CountryComponent(){
   const countries=useSelector(state=>state.countries);
   const error=useSelector(state=>state.error);
   const searchCountries=useSelector(state=>state.searchCountries);
-  console.log(countries);
+  const search=useSelector(state=>state.search);
+  console.log(searchCountries);
 
   const dispatch=useDispatch();
   const [data,setData]=useState({
@@ -75,7 +76,10 @@ export default function CountryComponent(){
   if(error) return<div>Error</div>
   if(!loading) return(
       <CountryBox>
-        <CountryContainer data={countrydata} onClick={onClick} dataRef={dataRef}/>
+        {search
+        ?<CountryContainer data={searchCountries} onClick={onClick} dataRef={dataRef}/>
+        :<CountryContainer data={countrydata} onClick={onClick} dataRef={dataRef}/>}
+
       <ToastContainer autoClose="3000"/>
       </CountryBox>
   );

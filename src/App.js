@@ -5,6 +5,16 @@ import CountryComponent from './Component/CountryComponent';
 import CreateComponent from './Component/CreateComponent';
 import SearchComponent from './Component/SearchComponent';
 
+function App() {
+return(
+  <GlobalStyle>
+    <SearchComponent/>
+    <CreateComponent/>
+    <CountryComponent/>
+  <ToastContainer autoClose="3000"/>
+  </GlobalStyle>
+);
+}
 
 const GlobalStyle=styled.div`
 display:flex;
@@ -16,18 +26,6 @@ width:85vw;
 const GlobalStyle2=styled.div`
 
 `
-
-function App() {
-return(
-  <GlobalStyle>
-    <SearchComponent/>
-    <CreateComponent/>
-    <CountryComponent/>
-  <ToastContainer autoClose="3000"/>
-  </GlobalStyle>
-);
-  
-}
 
 export default App;
 

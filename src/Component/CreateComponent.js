@@ -7,7 +7,7 @@ import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function CreateComponent(){
-    const {register,handleSubmit}=useForm();
+    const {register,handleSubmit,reset}=useForm();
     const dispatch=useDispatch();
 
     const onSubmit=(input)=>{
@@ -39,6 +39,7 @@ function CreateComponent(){
             return;
         }
             dispatch(addCountryAction(input));
+            reset();
         }
         
     return(

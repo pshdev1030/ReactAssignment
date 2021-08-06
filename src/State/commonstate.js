@@ -55,11 +55,34 @@ export const deleteCountryAction=(key)=>({
     key,
 })
 
-export const searchCountriesAction=(input)=>({
-    type:SEARCH_COUNTRY,
-    input,
-})
-export const sortByName=()=>{
+export const searchCountriesAction=(input)=>(dispatch,getState)=>{
+        if(input===''){
+            dispatch({
+                type:SEARCH_COUNTRY,
+                input,
+                countries:[],
+            })
+        }
+        else{
+            const countries=getState().countries;
+            const upperInput=input.toUpperCase();
+            const data =countries.reduce((acc,ele)=>{
+            if(ele.alpha2Code.toUpperCase().includes(upperInput)
+            ||ele.callingCodes.join("").includes(upperInput)
+            ||ele.capital.toUpperCase().includes(upperInput)
+            ||ele.name.toUpperCase().includes(upperInput)
+            ||ele.region.toUpperCase().includes(upperInput)){
+               acc.push(ele);
+            }
+            return acc;
+        },[])
+        console.log(data);
+            dispatch({
+                type:SEARCH_COUNTRY,
+                input,
+                countries:data,
+            })
+        }
 }
 
 const commonreducer=(state=initialState,action)=>{
@@ -92,6 +115,7 @@ const commonreducer=(state=initialState,action)=>{
         case SEARCH_COUNTRY:
             return {
                 ...state,
+                searchCountries:action.countries,
                 search:action.input,
             }
         default:
